@@ -1,0 +1,43 @@
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+pd.options.display.float_format = '{:.1f}'.format
+
+plt.rcParams['font.family'] = 'Malgun Gothic'  
+plt.rcParams['axes.unicode_minus'] = False
+
+
+startup_info = pd.read_csv("C:/Users/qkrrj/Desktop/data/startupdb/startup_db_info.csv",index_col=0, encoding = 'cp949')
+
+startup_info = startup_info.rename(columns={'investment level' : 'investment_level'})
+startup_info.drop(startup_info.loc[startup_info['name']=='쿠팡'].index, inplace=True)
+startup_info
+
+
+high_startup_info = startup_info.query("investment >= 100000000")
+high_startup_info
+
+
+def investment_median(lev):
+    return startup_info.groupby('investment_level').median().loc[lev,'investment']
+    
+    
+category_cols = ["field","onoff","year","location","investment_level","unicorn"]
+numerical_cols = ["people","investment"]
+
+
+sns.countplot(data=startup_info, x='year')
+
+
+
+sns.boxplot(data=startup_info, x="investment_level", y="investment", order=['S','PA','A','B','C','D','E','F'] ,showfliers = False)
+
+
+
+plt.figure(figsize=(25,10))
+sns.countplot(data=startup_info, x='field')
+
+
+plt.figure(figsize=(25,10))
+sns.countplot(data=high_startup_info, x='field')
